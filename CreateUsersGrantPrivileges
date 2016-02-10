@@ -1,0 +1,41 @@
+Create user Admin1@localhost
+Identified by 'Password1';
+
+Create user Admin2@localhost
+Identified by 'Password2';
+
+Create user manager@localhost
+Identified by 'manager';
+
+Grant All On Ecosave_Construction.*
+To manager@localhost;
+
+
+
+Grant Select, Insert, Update
+on ecosave_construction.*
+to Admin1@localhost;
+
+Grant Select, Insert, Update
+on ecosave_construction.*
+to Admin2@localhost;
+
+
+Grant delete 
+on .site
+to Admin1@localhost;
+
+
+Grant delete 
+on .branch
+to Admin1@localhost;
+
+
+Grant delete 
+on .site
+to Admin2@localhost;
+
+
+Grant delete 
+on .flatroof
+to Admin2@localhost;
