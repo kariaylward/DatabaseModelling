@@ -1,0 +1,106 @@
+CREATE DATABASE IF NOT EXISTS EcoSave_Construction;
+ 
+ USE EcoSave_Construction;
+ 
+ CREATE TABLE IF NOT EXISTS Country
+ (
+     CountryID int (3) Primary Key not null AUTO_INCREMENT,
+     CountryName varchar (50) not null,
+     CountryCapital varchar (50) UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS Branch
+(
+    BranchID int (3) PRIMARY KEY not null,
+    BranchName varchar (50),
+    BranchAddress varchar (50) not null,
+    BranchEmail varchar (50),
+    BranchPhone int (10) not null,
+    B_CountryID int (3) not null,
+    CONSTRAINT FK_BranchCountryID FOREIGN KEY(B_CountryID)REFERENCES Country(CountryID)
+);
+
+
+CREATE TABLE IF NOT EXISTS Building
+(
+    BuildingID int (3) PRIMARY KEY not null,
+    BuildingName varchar (50) UNIQUE,
+    BuildingType enum(‘Apartments’, ‘Two Storey Detached’, ‘One Storey’, ‘Two Storey’, ‘Townhouse’, ‘Semi Detached’) DEFAULT 'Two Storey' not null,
+    BuildingHeight int (4) not null
+);
+
+CREATE TABLE IF NOT EXISTS Roof
+(
+    RoofID int (3) PRIMARY KEY not null,
+    RoofType enum(‘Flat’, ‘Pitched’, ‘Vaulted’) DEFAULT 'Pitched' not null,
+    RoofAngle int (3) not null DEFAULT '45',
+    RoofSoilDepth int (5) not null
+);
+
+
+CREATE TABLE IF NOT EXISTS Client
+(
+    ClientID int (5) PRIMARY KEY not null,
+    ClientName varchar (50),
+    ClientAddress varchar (50) not null,
+    ClientEmail varchar (30) not null,
+    ClientPhone int (10) not null,
+    ClientVatNum int (10) UNIQUE,
+    CompanyName varchar (50),
+    CompanyDesc enum(‘SME’, ‘Multinational’) 	
+);
+
+
+CREATE TABLE IF NOT EXISTS Site
+(
+    SiteID int (3) PRIMARY KEY,
+    StartDate Date not null,
+    SiteAddress varchar (50) not null,
+    EndDate date not null,
+    S_BranchID int (3) not null,
+    S_RoofID int (3),
+    S_BuildingID int (3),
+    S_ClientID int (5),
+    CONSTRAINT FK_Site_BranchID FOREIGN KEY(S_BranchID) REFERENCES Branch (BranchID),
+    CONSTRAINT FK_Site_RoofID FOREIGN KEY(S_RoofID) REFERENCES Roof (RoofID),
+    CONSTRAINT FK_Site_BuildingID FOREIGN KEY(S_BuildingID) REFERENCES Building (BuildingID),
+    CONSTRAINT FK_Site_ClientID FOREIGN KEY(S_ClientID) REFERENCES Client (ClientID)
+    );
+
+INSERT INTO Country (CountryName, CountryCapital) VALUES ('Ireland', 'Dublin');
+INSERT INTO Country (CountryName, CountryCapital) VALUES ('England', 'London');
+INSERT INTO Country (CountryName, CountryCapital) VALUES ('Spain', 'Madrid');
+INSERT INTO Country (CountryName, CountryCapital) VALUES ('France', 'Paris');
+INSERT INTO Country (CountryName, CountryCapital) VALUES ('Germany', 'Berlin');
+
+INSERT INTO Branch VALUES (238,  'Ballsbridge',  'Shelbourne Road Ballsbridge Dublin 4 Ireland’, ’ info@EcoSaveIreland.ie',  1234567899,  1);
+INSERT INTO Branch VALUES (440, 'Grosvenor Place',  '17 Grosvenor Place  London England’, ’info@EcoSaveUK.co.uk',  2147483647,  2);
+INSERT INTO Branch VALUES (125,  'Paseo',  'Paseo de la Castellana Madrid Spain’, ‘info@EcoSaveSpain.es’,  3411234514,  3);
+INSERT INTO branch VALUES(559, 'Ave Foch', '14 Ave Foch Paris France', 'info@EcoSaveFrance.fr', 2346789435, 4);
+INSERT INTO branch VALUE (192, 'Jagerstrasse', '12 Jagerstrasse Berlin Germany', 'info@EcoSaveGermany.de', 5677891234, 5);
+
+INSERT INTO building VALUES (246, 'Kenny', 'Apartments', 13);
+INSERT INTO Building VALUES (355,  'Thatcher',  'Two Storey Detached’,  10);
+INSERT INTO building VALUES (187, 'Rodrigues', 'One Storey', 5);
+INSERT INTO building VALUES (688, 'Le Roux', 'Two Storey', 11);
+INSERT INTO building VALUES (146, 'Muller', 'Townhouse', 6);
+
+INSERT INTO Roof VALUES (148,  'Pitched',  55, 7);
+INSERT INTO Roof VALUES (267,  'Flat',  0, 8);
+INSERT INTO Roof VALUES (235,  'Pitched',  55, 7);
+INSERT INTO Roof VALUES (903,  'Flat',  0, 8);
+INSERT INTO Roof VALUES (166,  'Vaulted',  30, 8);
+
+INSERT INTO client VALUES(12334, 'Manning', '30 Beech Grove Ranelagh Dublin 6', 'info@jefferson.com', 01235679, 332, 'Jefferson Construction', 'SME');
+INSERT INTO client VALUES(34568, 'Lenihan', 'Hollywood Claremorris Mayo', 'info@WalshGardens.com', 014567359,147, 'Walsh Gardens', 'SME');
+INSERT INTO client VALUES(59687, 'Shea', 'Killarney Road Kenmare Co.Kerry', 'info@MerckPharma.com', 06578939, 539, 'Merck Pharma', 'Multinational');
+INSERT INTO client VALUES(28784, 'Dwyer', 'Dublin Road Mallow Co. Cork', 'info@mallowCoCo.com', 0213345687, 651, 'North Cork County Council', 'SME');
+INSERT INTO client VALUES(55497, 'Byrne', 'Inistioge Road Thomastown Co. Kilkenny', 'info@GlobalLogistics.com', 056354678, 251, 'Global Logistics', 'Multinational');
+INSERT INTO site VALUES(2, ‘2015-01-12’, '23 Jameson Avenue Balbriggan Co.Dublin', ‘2015-03-31’, 238, 148, 246, 59687);
+
+
+INSERT INTO Site VALUES(225, '2015-01-03', 'Kildalton Piltown Co. Kilkenny', '2015-03-28', 440, 267, 355, 12334);
+INSERT INTO Site VALUES(373, '2015-02-13', '14 Lower Kilmacud Road Stillorgan Co. Dublin', '2015-04-12', 125, 235, 187, 28784);
+INSERT INTO Site VALUES(617, '2015-05-10', 'Main Street Ballyhale Co. Kilkenny', '2015-07-09', 559, 903, 688, 55497);
+INSERT INTO Site VALUES(776, '2016-01-19', 'Calle Patricio Zammit Torrevieja Spain', '2016-02-27', 192, 166, 146, 34568);
+INSERT INTO Site VALUES(998, '2016-04-04', 'High St. Kilkenny Co. Kilkenny', '2016-07-28', 238, 148, 246, 59687);
