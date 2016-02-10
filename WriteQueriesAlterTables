@@ -1,0 +1,104 @@
+Select BranchName from .branch
+where
+B_CountryID=1;
+ 
+Select BuildingName, BuildingType from .Building
+where
+BuildingType = 'Two Storey';
+
+Select RoofId, RoofType from .Roof where RoofType != 'Flat';
+ 
+Select ClientName, ClientAddress, CompanyDesc from .client
+where
+ClientName like 'L%' and CompanyDesc !='Multinational';
+ 
+Select distinct RoofType from .roof;
+ 
+Select SiteAddress, StartDate from .site
+where
+EndDate > '2015-04-12';
+
+ 
+Select BuildingName, CostOfBuild from .building
+order by
+CostOfBuild asc;
+
+Select Count(CompanyName) from .client;
+
+Select RoofSoilDepth, RoofType from .roof
+Group by RoofType
+Having RoofSoilDepth>7;
+
+Select branch.BranchAddress, country.CountryName
+from .branch
+Inner Join .Country
+on Branch.B_CountryID=Country.CountryID
+order by Country.countryname asc;
+
+Select branch.BranchID, branch.BranchAddress, site.EndDate
+from .branch
+Left join .site 
+on Branch.BranchID=Site.S_BranchID
+where EndDate > '2015-04-12';
+
+Select ClientName, ClientAddress from .client
+where ClientAddress in (Select ClientAddress from .client where CompanyDesc = 'Multinational');
+
+Select BuildingName, CostOfBuild, BranchName, CountryCapital from ecosave_construction.country
+join ecosave_construction.branch on B_countryID = CountryID
+join ecosave_construction.site on S_branchID = BranchID
+join ecosave_construction.building on BuildingId = S_BuildingID
+where CostOfBuild > 50000 and branchName like 'B%';
+
+ 
+Create View FlatRoof
+as
+Select RoofID, RoofType from .roof
+where RoofType = 'Flat';
+
+Create View StartDatesSpain2
+as
+Select SiteAddress, StartDate from .site where SiteAddress like '%Spain';
+
+Create View EmailAddressesIreland(Irish_Emails)
+as
+Select BranchEmail from .branch where B_CountryID=1;
+ 
+Alter table .building
+add column CostOfBuild Double(8,2) not null
+after BuildingHeight;
+ 
+
+Delete from .building
+where BuildingName = 'Costa';
+
+
+alter table roof
+drop column RoofAngle;
+
+
+Update .building
+set CostOfBuild=83155.22
+where BuildingName='Muller';
+
+Update .building
+set CostOfBuild=61859.68
+where BuildingName='Ro%';
+
+Update .building
+set CostOfBuild=54225.39
+where BuildingName like 'K%';
+
+
+Update .building
+set CostOfBuild=110286.51
+where BuildingName like 'T%';
+
+
+Update .building
+set CostOfBuild=80617.29
+where BuildingName='Le Roux';
+
+
+ 
+
